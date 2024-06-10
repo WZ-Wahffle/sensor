@@ -1,6 +1,17 @@
-import java.io.File
-import kotlin.math.max
+/**
+ * Analyseprogramm für bereitgestellte Test-Sensordaten
+ * @author Marc Vauderwange, mvauderw@stud.hs-offenburg.de
+ */
 
+import java.io.File
+
+/**
+ * Funktionaler Mapper, welcher aus zwei Listen alle möglichen Paare aus Elementen
+ * jener Listen bildet
+ * @receiver Die erste Liste
+ * @param other Die zweite Liste
+ * @return Liste von allen möglichen Kombinationen von {$(Element aus l1), $(Element aus l2)}
+ */
 fun <S, T> List<S>.doublePermute(other: List<T>) : List<Pair<S, T>> =
     this.flatMap { s -> List(other.size) {s}.zip(other) }
 
@@ -9,9 +20,12 @@ fun main()
     val sensors = listOf("acceleration", "blutdruck", "pulse", "temperature")
     val states = listOf("excited", "happy", "normal", "sad", "stressed")
 
-    sensors.doublePermute(states).forEach{ it1 ->
-        val f = File("./sensing_data/sensing_data/" + it1.first + "_" + it1.second + ".txt").bufferedReader()
-        when(it1.first)
+    // Bilde alle Kombinationen aus Emotion und Sensorwert und lese dessen Datei aus
+    states.doublePermute(sensors).forEach{ it1 ->
+        val f = File("./sensing_data/" + it1.second + "_" + it1.first + ".txt").bufferedReader()
+
+        // Separierung zwischen Blutdruck und den restlichen Werten, da Blutdruck ein anderes Format vorweist
+        when(it1.second)
         {
             "acceleration", "pulse", "temperature" ->
             {
@@ -20,6 +34,8 @@ fun main()
                 var avg = 0.0
                 var total = 0
                 f.forEachLine { it2 ->
+                    // Breche Suche in Messwertdatei ab, sobald ein String gefunden wurde, der nicht mit einem Zeitstempel beginnt
+                    // (Erste 5 Buchstaben bestehen nicht aus zwei Zahlen, einem Doppelpunkt und zwei Zahlen)
                     if(!it2.take(5).matches(Regex("\\d\\d:\\d\\d"))) return@forEachLine
                     val inc = it2.takeLastWhile { it3 -> it3 != ' ' }.toDouble()
                     avg += inc
@@ -28,11 +44,13 @@ fun main()
 
                     total++
                 }
-                println("${it1.first} ${it1.second} min|max|avg: $min | $max | ${avg / total}")
+                // Gebe für jeden Messwert Minimum, Maximum und Mittelwert (letzteres größtenteils nutzlos) aus
+                println(String.format("%-40s %f | %f | %f", "${it1.second} ${it1.first} min|max|avg:", min, max, avg / total))
             }
 
             "blutdruck" ->
             {
+                // Äquivalent zu anderen Messwerten, nur mit zwei Werten pro Zeile
                 var minSystolic = Double.MAX_VALUE
                 var maxSystolic = 0.0
                 var avgSystolic = 0.0
@@ -52,8 +70,7 @@ fun main()
                     if(minDiastolic > incDiastolic) minDiastolic = incDiastolic
                     total++
                 }
-
-                println("${it1.first} ${it1.second} min|max|avg: $minSystolic/$minDiastolic | $maxSystolic/$maxDiastolic | ${avgSystolic / total}/${avgDiastolic / total}")
+                println(String.format("%-40s %f/%f | %f/%f | %f/%f", "${it1.second} ${it1.first} min|max|avg:", minSystolic, minDiastolic, maxSystolic, maxDiastolic, avgSystolic / total, avgDiastolic / total))
             }
         }
     }
