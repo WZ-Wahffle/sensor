@@ -1,6 +1,9 @@
 /**
  * Analyseprogramm für bereitgestellte Test-Sensordaten
  * @author Marc Vauderwange, mvauderw@stud.hs-offenburg.de
+ *
+ * NOTIZ: Die zu überprüfenden Programme müssen sich in einem Verzeichnis "sensing_data" befinden,
+ * welcher sich im Working Directory von diesem Programm befindet!
  */
 
 import java.io.File
