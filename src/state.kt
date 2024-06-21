@@ -38,23 +38,23 @@ class state(val acceleration: ClosedFloatingPointRange<Double>,
         bytes[2] = (numberOfBitMaps shr 16).toByte()
         bytes[3] = (numberOfBitMaps shr 24).toByte()
 
-        outputStream.write(bytes, 0 , 4);
+        outputStream.write(bytes, 0 , 4)
 
         for(i in 0..<numberOfBitMaps)
         {
-            println("File: $baseFilePath$i.bmp");
-            val file = File("$baseFilePath$i.bmp");
-            val fileInputStream = FileInputStream(file);
+            println("File: $baseFilePath$i.bmp")
+            val file = File("$baseFilePath$i.bmp")
+            val fileInputStream = FileInputStream(file)
 
-            val buffer = ByteArray(4096);
-            var bytesRead: Int;
+            val buffer = ByteArray(4096)
+            var bytesRead: Int
 
             while (fileInputStream.read(buffer).also { bytesRead = it } != -1)
             {
-                outputStream.write(buffer, 0, bytesRead);
+                outputStream.write(buffer, 0, bytesRead)
             }
-            fileInputStream.close();
-            println("file ${i + 1} out of ${numberOfBitMaps} send");
+            fileInputStream.close()
+            println("file ${i + 1} out of ${numberOfBitMaps} send")
         }
         println("File sent")
         socket.close()

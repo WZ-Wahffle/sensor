@@ -11,35 +11,35 @@ fun main(args: Array<String>)
                             (80.0..100.0),
                             (90.0..140.0),
                             6,
-                            "./BitMaps/excited/excited");
+                            "./BitMaps/excited/excited")
 
     val happy = state(      (1.0..3.5),
                             (90.0..120.0),
                             (60.0..80.0),
                             (50.0..90.0),
                             8,
-                            "./BitMaps/happy/happy");
+                            "./BitMaps/happy/happy")
 
     val normal = state(     (0.5..3.0),
                             (90.0..120.0),
                             (60.0..80.0),
                             (60.0..100.0),
                             8,
-                            "./BitMaps/normal/normal");
+                            "./BitMaps/normal/normal")
 
     val sad = state(        (0.5..1.5),
                             (100.0..130.0),
                             (70.0..90.0),
                             (70.0..110.0),
                             8,
-                            "./BitMaps/sad/sad");
+                            "./BitMaps/sad/sad")
 
     val stressed = state(   (1.0..3.5),
                             (120.0..160.0),
                             (80.0..100.0),
                             (90.0..140.0),
                             7,
-                            "./BitMaps/stressed/stressed");
+                            "./BitMaps/stressed/stressed")
 
     val states = arrayOf(excited, happy, normal, sad, stressed);
     if (args.isEmpty())
@@ -54,8 +54,8 @@ fun main(args: Array<String>)
     {
         if(currentState.isState(acceleration, bloodPressureSystolic, bloodPressureDiastolic, pulse))
         {
-            currentState.sendBmp();
-            break;
+            currentState.sendBmp()
+            break
         }
     }
 
