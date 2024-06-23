@@ -16,5 +16,17 @@ kotlin TestDataParserKt
 kotlin EvaluateInputKt 2 130 90 100
 ```
 # C-Teil
-
-
+Für den RaspberryPi 3 Model B+ zur verwendung mit [diesem Display](https://www.waveshare.com/wiki/1.28inch_LCD_Module) geschrieben. Sollte auch auf anderen Modellen Funktionieren. 
+## Ausführen
+Die Anleitung zum Installieren der API ist [hier](https://www.waveshare.com/wiki/1.28inch_LCD_Module) zu finden, die BCM2835-Bibliothek wird verwendet.
+Das Kompilieren erfolg mit der von der API mitgelieferten API und die [main.c](./main.c) ersetzt die gleichnamige Datei in "LCD_Module_RPI_code/RaspberryPi/c/examples" der API.
+Das Ausführen des C-Programms erfolgt mit:
+```
+sudo ./main
+```
+## Erweiterung
+Bei Erweiterung des C-Programms ist darauf zu achten, dass diese Zeile nicht gelöscht wird:
+```
+DEV_GPIO_Mode(18, BCM2835_GPIO_FSEL_OUTP);
+```
+Die API enthält einen Fehler in der Initialisierung des Backlight-Pins, diese Zeile behebt diesen.
