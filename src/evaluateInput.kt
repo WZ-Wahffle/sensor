@@ -2,10 +2,14 @@
  * Mappingprogramm, welches Messwerte als Argumente nimmt und zu Emotion korrespondierende Emoji-UTF8-Codepoints ausgibt.
  * Mit Unix-Philosophie konzipiert, als Bestandteil des Datenstroms gedacht
  * @author Marc Vauderwange, mvauderw@stud.hs-offenburg.de
+ * @author Valentin Werner, vwerner1@stud.hs-offenburg.de
  */
 
 fun main(args: Array<String>)
 {
+    //Intervallen, welche mit dem Analyseprogramm festgestellt wurden
+    //Hier können einfach neue Gemütszustände hinzugefügt werden
+
     val excited = state(    (1.5..4.0),
                             (120.0..160.0),
                             (80.0..100.0),
@@ -41,7 +45,7 @@ fun main(args: Array<String>)
                             7,
                             "./BitMaps/stressed/stressed")
 
-    val states = arrayOf(excited, happy, normal, sad, stressed);
+    val states = arrayOf(excited, happy, normal, sad, stressed)
     if (args.isEmpty())
     {
         return
@@ -49,7 +53,7 @@ fun main(args: Array<String>)
 
     val (acceleration, bloodPressureSystolic, bloodPressureDiastolic, pulse) = args.map { it.toDouble() }
 
-    // Messwerte werden nach Intervallen geprüft, welche mit dem Analyseprogramm festgestellt wurden
+    // Aktuelle messwerte werden nach den Intervallen geprüft, welche in den State-Objekten gespeichert sind und dann an den RaspberryPi versendet
     for(currentState in states)
     {
         if(currentState.isState(acceleration, bloodPressureSystolic, bloodPressureDiastolic, pulse))

@@ -3,6 +3,16 @@ import java.io.FileInputStream
 import java.io.OutputStream
 import java.net.Socket
 
+/**
+ * State-Klasse, welche einen Gemütszustand abbildet.
+ * @param acceleration Bereich des Beschleunigungssensors, der zum Gemüt passt.
+ * @param bloodPressureSystolic Bereich des systolischen Blutdrucksensors, der zum Gemüt passt.
+ * @param bloodPressureDiastolic Bereich des diastolischen Blutdrucksensors, der zum Gemüt passt.
+ * @param pulse Bereich des Herzschlagsensors, der zum Gemüt passt.
+ * @param numberOfBitMaps Anzahl der zur Animation gehörenden Bitmaps
+ * @param baseFilePath Pfad der Basis der Bitmaps. Bitmaps haben dem Schema zu Folgen: "nameX.bmp" (X = 0 bis numberOfBitMaps - 1). Der Pfad wäre hier: "name". "X" und ".bmp" sind nicht Teil des Pfades. X muss mit 0 beginnen. Auflösung hat 240x240 zu sein!
+ * @author Valentin Werner, vwerner1@stud.hs-offenburg.de
+ */
 class state(val acceleration: ClosedFloatingPointRange<Double>,
             val bloodPressureSystolic: ClosedFloatingPointRange<Double>,
             val bloodPressureDiastolic: ClosedFloatingPointRange<Double>,
@@ -19,8 +29,13 @@ class state(val acceleration: ClosedFloatingPointRange<Double>,
         return  this.acceleration.contains(acceleration)
                 && this.bloodPressureSystolic.contains(bloodPressureSystolic)
                 && this.bloodPressureDiastolic.contains(bloodPressureDiastolic)
-                && this.pulse.contains(pulse);
+                && this.pulse.contains(pulse)
     }
+
+    /**
+     * Sendet die BitMaps and den RaspberryPi. Dieser gibt diese dann in einer Schleife aus.
+     * @author Valentin Werner, vwerner1@stud.hs-offenburg.de
+     */
     fun sendBmp()
     {
         val serverAddress = "192.168.2.112"
@@ -29,9 +44,10 @@ class state(val acceleration: ClosedFloatingPointRange<Double>,
         println("Connected to server")
 
 
-        val outputStream: OutputStream = socket.getOutputStream();
+        val outputStream: OutputStream = socket.getOutputStream()
 
         println("$numberOfBitMaps bmps\n")
+        //this has to be done. I think it might have to do with little/big endian
         val bytes = ByteArray(4)
         bytes[0] = (numberOfBitMaps shr 0).toByte()
         bytes[1] = (numberOfBitMaps shr 8).toByte()
